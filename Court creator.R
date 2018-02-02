@@ -18,8 +18,8 @@ create_circle = function(center = c(0, 0),
                          start = 0,
                          end = 2) {
   pts = seq(start * pi, end * pi, length.out = npoints)
-  data.frame(x = center[1] + ((diameter / 2) * cos(pts)),
-             y = center[2] + ((diameter / 2) * sin(pts)))
+  data.frame(x = center[1] + ((diameter/2) * cos(pts)),
+             y = center[2] + ((diameter/2) * sin(pts)))
 }
 
 # Function needed to get opposite side of court
@@ -60,7 +60,7 @@ circle_mid_in = create_circle(center = c(25, 47), diameter = (6 - (2/12)) * 2)
 circle_mid_out = create_circle(center = c(25, 47), diameter = 6 * 2)
 
 # Free Throw Circle
-circle_ft_in = create_circle(center = c(25, 19), diameter = (6 - 1 / 6) * 2)
+circle_ft_in = create_circle(center = c(25, 19), diameter = (6 - (2/12)) * 2)
 circle_ft_out = create_circle(center = c(25, 19), diameter = 6 * 2)
 
 # Hoop
@@ -330,20 +330,20 @@ get_portrait_court = function(){
 # Make landscape court image
 get_landscape_court = function(){
   landscape_court = court
-  landscape_court$x = pi * (landscape_court$x / 180)
-  landscape_court$y = pi * (landscape_court$y / 180)
+  landscape_court$x = pi * (landscape_court$x/180)
+  landscape_court$y = pi * (landscape_court$y/180)
   rotation_matrix = matrix(
-    c(cos(pi / 2),
-      sin(pi / 2), -sin(pi / 2),
-      cos(pi / 2)
+    c(cos(pi/2),
+      sin(pi/2), -sin(pi/2),
+      cos(pi/2)
     ),
     ncol = 2
   )
   rotated_coords = apply(landscape_court[, c("x", "y")], 1, function(x) x %*% rotation_matrix)
   landscape_court$x = rotated_coords[1, ]
   landscape_court$y = rotated_coords[2, ]
-  landscape_court$x = 180 * (landscape_court$x / pi)
-  landscape_court$y = 180 * (landscape_court$y / pi)
+  landscape_court$x = 180 * (landscape_court$x/pi)
+  landscape_court$y = 180 * (landscape_court$y/pi)
   
   ggplot(data = landscape_court, aes(x = x, y = y, group = group)) +
     geom_polygon(col = "#e04e39", fill = "#13294b") +
