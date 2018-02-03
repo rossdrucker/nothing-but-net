@@ -10,6 +10,14 @@
 #####################################################################################
 
 library(ggplot2)
+library(png)
+library(grid)
+library(raster)
+library(magick)
+
+qplot(1:10, 1:10, geom="blank") +
+  annotation_custom(g, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) +
+  geom_point()
 
 # Function to draw circle in ggplot
 create_circle = function(center = c(0, 0),
@@ -307,10 +315,15 @@ court = rbind(court,
 )
 
 # Make portrait court image
-get_portrait_court = function(){
-  portrait_court = court
+get_portrait_court = function(team){
+  logo = image_read(paste('Logos/', team, '.png', sep = ''))
+  logo = image_rotate(logo, -90)
+  logo = rasterGrob(logo, interpolate = TRUE)
+  
+  portrait_court = court[court$description != 'Center Circle', ]
   ggplot(data = portrait_court, aes(x = x, y = y, group = group)) +
-    geom_polygon(col = "#e04e39", fill = "#13294b") + 
+    geom_rect(xmin = 0, xmax = 50, ymin = 0, ymax = 94, fill = "#d2ab6f") +
+    geom_polygon(col = paste('#', b1g$primary[b1g$schools == team], sep = ''), fill = paste('#', b1g$secondary[b1g$schools == team], sep = '')) + 
     theme(
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank(),
@@ -324,12 +337,13 @@ get_portrait_court = function(){
     ) +
     coord_equal() +
     xlab("") +
-    ylab("")
+    ylab("") +
+    annotation_custom(logo, xmin = 17, xmax = 33, ymin = 39, ymax = 55)
 }
 
 # Make landscape court image
-get_landscape_court = function(){
-  landscape_court = court
+get_landscape_court = function(team){
+  landscape_court = court[court$description != 'Center Circle', ]
   landscape_court$x = pi * (landscape_court$x/180)
   landscape_court$y = pi * (landscape_court$y/180)
   rotation_matrix = matrix(
@@ -345,8 +359,12 @@ get_landscape_court = function(){
   landscape_court$x = 180 * (landscape_court$x/pi)
   landscape_court$y = 180 * (landscape_court$y/pi)
   
+  logo = readPNG(paste('Logos/', team, '.png', sep = ''))
+  logo = rasterGrob(logo, interpolate = TRUE)
+  
   ggplot(data = landscape_court, aes(x = x, y = y, group = group)) +
-    geom_polygon(col = "#e04e39", fill = "#13294b") +
+    geom_rect(xmin = 0, xmax = 94, ymin = -50, ymax = 0, fill = "#d2ab6f") +
+    geom_polygon(col = paste('#', b1g$primary[b1g$schools == team], sep = ''), fill = paste('#', b1g$secondary[b1g$schools == team], sep = '')) +
     coord_equal() + 
     theme(
       panel.grid.major = element_blank(),
@@ -360,12 +378,14 @@ get_landscape_court = function(){
       axis.title = element_blank()
     ) +
     xlab("") +
-    ylab("")  
+    ylab("") +
+    annotation_custom(logo, xmin = 39, xmax = 55, ymin = -33, ymax = -17)
 }
 
 # Make half court
 get_half_court = function(){
   ggplot(data = court[court$side == 1, ], aes(x = x, y = y, group = group)) + 
+    geom_rect(xmin = 0, xmax = 50, ymin = 0, ymax = 47, fill = "#d2ab6f") +
     geom_polygon(col = "#e04e39", fill = '#13294b') +
     coord_equal() +
     theme(
