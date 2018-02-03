@@ -15,9 +15,7 @@ library(grid)
 library(raster)
 library(magick)
 
-qplot(1:10, 1:10, geom="blank") +
-  annotation_custom(g, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) +
-  geom_point()
+colors = read.csv('data/School Colors.csv', stringsAsFactors = FALSE)
 
 # Function to draw circle in ggplot
 create_circle = function(center = c(0, 0),
