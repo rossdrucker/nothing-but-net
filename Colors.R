@@ -282,4 +282,3 @@ colors = data.frame(
 
 idx = order(colors$schools)
 colors = colors[idx, ]
-View(colors)
