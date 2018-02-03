@@ -323,7 +323,7 @@ get_portrait_court = function(team){
   portrait_court = court[court$description != 'Center Circle', ]
   ggplot(data = portrait_court, aes(x = x, y = y, group = group)) +
     geom_rect(xmin = 0, xmax = 50, ymin = 0, ymax = 94, fill = "#d2ab6f") +
-    geom_polygon(col = paste('#', b1g$primary[b1g$schools == team], sep = ''), fill = paste('#', b1g$secondary[b1g$schools == team], sep = '')) + 
+    geom_polygon(col = paste('#', colors$primary[colors$schools == team], sep = ''), fill = paste('#', colors$secondary[colors$schools == team], sep = '')) + 
     theme(
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank(),
@@ -364,7 +364,7 @@ get_landscape_court = function(team){
   
   ggplot(data = landscape_court, aes(x = x, y = y, group = group)) +
     geom_rect(xmin = 0, xmax = 94, ymin = -50, ymax = 0, fill = "#d2ab6f") +
-    geom_polygon(col = paste('#', b1g$primary[b1g$schools == team], sep = ''), fill = paste('#', b1g$secondary[b1g$schools == team], sep = '')) +
+    geom_polygon(col = paste('#', colors$primary[colors$schools == team], sep = ''), fill = paste('#', colors$secondary[colors$schools == team], sep = '')) +
     coord_equal() + 
     theme(
       panel.grid.major = element_blank(),
@@ -383,10 +383,10 @@ get_landscape_court = function(team){
 }
 
 # Make half court
-get_half_court = function(){
+get_half_court = function(team){
   ggplot(data = court[court$side == 1, ], aes(x = x, y = y, group = group)) + 
     geom_rect(xmin = 0, xmax = 50, ymin = 0, ymax = 47, fill = "#d2ab6f") +
-    geom_polygon(col = "#e04e39", fill = '#13294b') +
+    geom_polygon(col = paste('#', colors$primary[colors$schools == team], sep = ''), fill = paste('#', colors$secondary[colors$schools == team], sep = '')) +
     coord_equal() +
     theme(
       panel.grid.major = element_blank(),
